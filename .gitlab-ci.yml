@@ -12,6 +12,7 @@ services:
     entrypoint: ["dockerd-entrypoint.sh"]
 
 build:
+  image: artifacts.mobility.siemens.com/dk_smo_sw-docker-development-local/docker:latest
   script:
     - docker build . -t builder
     - docker run --rm -v $(pwd):/ipxe -v $(pwd)/output:/output builder /bin/bash -c 'git config --global --add safe.directory /ipxe && cd /ipxe/src && make clean && echo DOWNLOAD_PROTO_NFS >>config/general.h && make bin-x86_64-efi/ipxe.efi EMBED=clris.ipxe && cp bin-x86_64-efi/ipxe.efi /output/'
