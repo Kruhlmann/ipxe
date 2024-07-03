@@ -1,6 +1,11 @@
+# Copyright (c) Siemens Mobility A/S 2024, All Rights Reserved - CONFIDENTIAL
 variables:
   DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2376
+
+include:
+  - project: 'smo-denmark/devops/pipelines/docker'
+    file: 'artifactory.yml'
 
 services:
   - name: docker:dind
