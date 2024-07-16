@@ -1,23 +1,15 @@
 # Copyright (c) Siemens Mobility A/S 2024, All Rights Reserved - CONFIDENTIAL
-variables:
-  DRIVER: overlay2
-  DOCKER_HOST: tcp://docker:2376
-
 include:
   - project: 'smo-denmark/devops/pipelines/docker'
     file: 'artifactory.yml'
 
-services:
-  - name: docker:dind
-    entrypoint: ["dockerd-entrypoint.sh"]
-
 build:
-  image: artifacts.mobility.siemens.com/dk_smo_sw-docker-development-local/docker:latest
-  before_script:
-    - docker login -u $ARTIFACTORY_USERNAME -p $ARTIFACTORY_PASSWORD $ARTIFACTORY_HOST
+  image: artifacts.mobility.siemens.com/dk_smo_sw-docker-development-local/smo-denmark/commercial-projects/hovedstadens-letbane/clris/artifacts/ipxe
   script:
-    - docker build . -t builder
-    - docker run --rm -v $(pwd):/ipxe -v $(pwd)/output:/output builder /bin/bash -c 'git config --global --add safe.directory /ipxe && cd /ipxe/src && make clean && echo DOWNLOAD_PROTO_NFS >>config/general.h && make bin-x86_64-efi/ipxe.efi EMBED=clris.ipxe && cp bin-x86_64-efi/ipxe.efi /output/'
+    - cd src || exit 1
+    - echo "#define DOWNLOAD_PROTO_NFS" >>config/general.h
+    - make bin-x86_64-efi/ipxe.efi EMBED=clris.ipxe
+    - cp bin-x86_64-efi/ipxe.efi ../
   artifacts:
     paths:
-      - ./output/ipxe.efi
+      - src/bin-x86_64-efi/ipxe.efi
