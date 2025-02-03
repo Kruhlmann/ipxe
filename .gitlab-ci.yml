@@ -1,10 +1,6 @@
 # Copyright (c) Siemens Mobility A/S 2024, All Rights Reserved - CONFIDENTIAL
-include:
-  - project: 'smo-denmark/devops/pipelines/docker'
-    file: 'artifactory.yml'
-
 build:
-  image: ubuntu-22.04
+  image: artifacts.mobility.siemens.com/dk_smo_sw-docker-development-local/smo-denmark/devops/docker-images/debian:bookworm
   script:
     - "apt install -y mtools syslinux isolinux libc6-dev-i386 libgcc-s1:i386 libc6-dbg:i386"
     - cd src || exit 1
