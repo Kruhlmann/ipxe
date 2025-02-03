@@ -2,6 +2,8 @@
 build:
   image: artifacts.mobility.siemens.com/dk_smo_sw-docker-development-local/smo-denmark/devops/docker-images/debian:bookworm
   script:
+    - "export HTTP_PROXY=http://10.165.7.10:3128"
+    - "export HTTPS_PROXY=http://10.165.7.10:3128"
     - dpkg --add-architecture i386
     - apt update
     - "apt install -y mtools syslinux isolinux libc6-dev-i386 libgcc-s1:i386 libc6-dbg:i386"
