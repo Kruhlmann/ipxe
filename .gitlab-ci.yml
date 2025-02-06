@@ -1,12 +1,12 @@
 # Copyright (c) Siemens Mobility A/S 2024, All Rights Reserved - CONFIDENTIAL
+include:
+  - project: 'smo-denmark/devops/pipelines/docker'
+    file: 'artifactory.yml'
+
 build:
-  image: artifacts.mobility.siemens.com/dk_smo_sw-docker-development-local/smo-denmark/devops/docker-images/debian:bookworm
+  image: artifacts.mobility.siemens.com/smo-denmark/data-integration-analysis/projects/letbane-paa-ring-3/clris/artifacts/ipxe:latest
+  needs: [docker-deploy-development]
   script:
-    - "export HTTP_PROXY=http://10.165.7.10:3128"
-    - "export HTTPS_PROXY=http://10.165.7.10:3128"
-    - dpkg --add-architecture i386
-    - apt update
-    - "apt install -y mtools syslinux isolinux libc6-dev-i386 libgcc-s1:i386 libc6-dbg:i386"
     - cd src || exit 1
     - echo "#define DOWNLOAD_PROTO_NFS" >>config/general.h
     - make -j 4 bin-x86_64-efi/ipxe.efi EMBED=clris.ipxe
@@ -14,3 +14,4 @@ build:
   artifacts:
     paths:
       - src/bin-x86_64-efi/ipxe.efi
+      - src/clris.ipxe
