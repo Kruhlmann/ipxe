@@ -7,11 +7,8 @@ build:
   image: artifacts.mobility.siemens.com/smo-denmark/data-integration-analysis/projects/letbane-paa-ring-3/clris/artifacts/ipxe:latest
   needs: [docker-deploy-development]
   script:
-    - cd src || exit 1
-    - echo "#define DOWNLOAD_PROTO_NFS" >>config/general.h
-    - make -j 4 bin-x86_64-efi/ipxe.efi EMBED=clris.ipxe
-    - cp bin-x86_64-efi/ipxe.efi ../
+    - make ipxe.efi
   artifacts:
     paths:
-      - src/bin-x86_64-efi/ipxe.efi
+      - ipxe.efi
       - src/clris.ipxe
